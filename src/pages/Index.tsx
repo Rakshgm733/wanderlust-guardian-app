@@ -7,6 +7,7 @@ import FoodRecommendations from '@/components/FoodRecommendations';
 import SafetyAlerts from '@/components/SafetyAlerts';
 import TranslationHelper from '@/components/TranslationHelper';
 import InteractiveMap from '@/components/InteractiveMap';
+import ApiKeyManager from '@/components/ApiKeyManager';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('events');
@@ -23,6 +24,8 @@ const Index = () => {
         return <SafetyAlerts />;
       case 'translate':
         return <TranslationHelper />;
+      case 'settings':
+        return <ApiKeyManager />;
       default:
         return <CulturalEvents />;
     }
@@ -44,6 +47,9 @@ const Index = () => {
         <div className="mt-8 p-4 bg-card rounded-lg border text-center">
           <p className="text-sm text-muted-foreground">
             🌍 Your Local Cultural Guide - Stay informed, stay safe, explore more
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Configure API keys in the APIs section for real-time data
           </p>
         </div>
       </div>

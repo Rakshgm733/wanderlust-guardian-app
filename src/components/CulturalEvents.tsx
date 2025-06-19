@@ -1,48 +1,65 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Calendar } from 'lucide-react';
+import { Calendar, MapPin, Users, Loader2 } from 'lucide-react';
+import { getCulturalEvents, CulturalEvent } from '@/services/eventsService';
 
 const CulturalEvents = () => {
-  const events = [
-    {
-      id: 1,
-      title: "Traditional Music Festival",
-      date: "Today, 7:00 PM",
-      location: "Central Park",
-      category: "Music",
-      description: "Experience local traditional music and dance performances",
-      attendees: 250
-    },
-    {
-      id: 2,
-      title: "Historical Walking Tour",
-      date: "Tomorrow, 10:00 AM",
-      location: "Old Town Square",
-      category: "History",
-      description: "Guided tour through the historic district with local stories",
-      attendees: 45
-    },
-    {
-      id: 3,
-      title: "Street Food Market",
-      date: "This Weekend",
-      location: "Market Street",
-      category: "Food",
-      description: "Sample authentic local cuisine from various vendors",
-      attendees: 500
-    }
-  ];
+  const [events, setEvents] = useState<CulturalEvent[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadEvents = async () => {
+      try {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            async (position) => {
+              const data = await getCulturalEvents(position.coords.latitude, position.coords.longitude);
+              setEvents(data);
+              setLoading(false);
+            },
+            async () => {
+              // Default location if permission denied
+              const data = await getCulturalEvents(40.7128, -74.0060);
+              setEvents(data);
+              setLoading(false);
+            }
+          );
+        }
+      } catch (error) {
+        console.error('Error loading events:', error);
+        setLoading(false);
+      }
+    };
+
+    loadEvents();
+  }, []);
 
   const getCategoryColor = (category: string) => {
     switch (category) {
       case 'Music': return 'bg-purple-500';
       case 'History': return 'bg-amber-500';
       case 'Food': return 'bg-green-500';
-      default: return 'bg-blue-500';
+      case 'Culture': return 'bg-blue-500';
+      default: return 'bg-gray-500';
     }
   };
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center space-x-2 mb-4">
+          <Calendar className="h-5 w-5 text-primary" />
+          <h2 className="text-xl font-semibold">Cultural Events</h2>
+        </div>
+        <div className="flex items-center justify-center p-8">
+          <Loader2 className="h-8 w-8 animate-spin" />
+          <span className="ml-2">Loading events...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -61,11 +78,22 @@ const CulturalEvents = () => {
                   {event.category}
                 </Badge>
               </div>
-              <p className="text-sm text-muted-foreground">{event.date} • {event.location}</p>
+              <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                <MapPin className="h-3 w-3" />
+                <span>{event.date} • {event.location}</span>
+              </div>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground mb-2">{event.description}</p>
-              <p className="text-xs text-primary font-medium">{event.attendees} people interested</p>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-1 text-xs text-primary font-medium">
+                  <Users className="h-3 w-3" />
+                  <span>{event.attendees} people interested</span>
+                </div>
+                {event.price && (
+                  <Badge variant="secondary">{event.price}</Badge>
+                )}
+              </div>
             </CardContent>
           </Card>
         ))}
