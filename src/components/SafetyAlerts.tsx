@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { SOS } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 
 const SafetyAlerts = () => {
   const safetyInfo = [
@@ -41,7 +41,7 @@ const SafetyAlerts = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-2 mb-4">
-        <SOS className="h-5 w-5 text-primary" />
+        <AlertTriangle className="h-5 w-5 text-primary" />
         <h2 className="text-xl font-semibold">Safety Information</h2>
       </div>
       

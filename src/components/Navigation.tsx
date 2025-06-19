@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Map, Bell, Calendar, Food, SOS, MessageSquare } from 'lucide-react';
+import { Map, Bell, Calendar, ChefHat, AlertTriangle, MessageSquare } from 'lucide-react';
 
 interface NavigationProps {
   activeSection: string;
@@ -12,8 +12,8 @@ const Navigation: React.FC<NavigationProps> = ({ activeSection, onSectionChange 
   const navItems = [
     { id: 'map', label: 'Map', icon: Map },
     { id: 'events', label: 'Events', icon: Calendar },
-    { id: 'food', label: 'Food', icon: Food },
-    { id: 'safety', label: 'Safety', icon: SOS },
+    { id: 'food', label: 'Food', icon: ChefHat },
+    { id: 'safety', label: 'Safety', icon: AlertTriangle },
     { id: 'translate', label: 'Translate', icon: MessageSquare },
   ];
 
